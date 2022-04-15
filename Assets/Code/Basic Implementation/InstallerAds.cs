@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using Domain;
@@ -101,4 +101,4 @@ public class InstallerAds : MonoBehaviour
     }
 
 }
-
+*/
