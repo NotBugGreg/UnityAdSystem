@@ -42,7 +42,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 
         private void ShowGoogleAdmob()
         {
-            _googleAdmob.UserChoseToWatchAd();
+            _googleAdmob.RequestRewardedAd();
         }
         
     }

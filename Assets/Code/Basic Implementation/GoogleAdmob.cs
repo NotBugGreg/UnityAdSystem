@@ -28,28 +28,26 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
         private void ConfigurationMobileAds()
         {
             MobileAds.Initialize(initStatus => { });
-            RequestRewardedAd();
-            ConfigureEvents();
-        /*    List<string> deviceIds = new List<string>();
+            List<string> deviceIds = new List<string>();
             deviceIds.Add("1AC3C6A160DE46279DB08F2BA94DBEEE");
             RequestConfiguration requestConfiguration = new RequestConfiguration
                     .Builder()
                 .SetTestDeviceIds(deviceIds)
                 .build();
-            MobileAds.SetRequestConfiguration(requestConfiguration);*/
-
+            MobileAds.SetRequestConfiguration(requestConfiguration);
         }
 
-        private void RequestRewardedAd()
+        public void RequestRewardedAd()
         {
             _rewardedAd = new RewardedAd(_adID);
+            ConfigureEvents();
             // Create an empty ad request.
             AdRequest request = new AdRequest.Builder().Build();
             // Load the rewarded ad with the request.
             _rewardedAd.LoadAd(request);
         }
 
-        public void ConfigureEvents()
+        private void ConfigureEvents()
         {
             // Called when an ad request has successfully loaded.
             _rewardedAd.OnAdLoaded += HandleRewardedAdLoaded;
@@ -76,6 +74,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             MonoBehaviour.print("HandleRewardedAdLoaded event received");
             Task.Run(() => taskCompletionSource.Task);
 
+            UserChoseToWatchAd();
         }
 
         private void HandleRewardedAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
@@ -115,6 +114,18 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
                 result => OnSuccess(result, taskCompletionSource), error => OnError(error, taskCompletionSource));
             MonoBehaviour.print("HandleRewardedAdClosed event received");
             Task.Run(() => taskCompletionSource.Task);
+            
+            _rewardedAd.OnAdLoaded -= HandleRewardedAdLoaded;
+            // Called when an ad request failed to load.
+            _rewardedAd.OnAdFailedToLoad -= HandleRewardedAdFailedToLoad;
+            // Called when an ad is shown.
+            _rewardedAd.OnAdOpening -= HandleRewardedAdOpening;
+            // Called when an ad request failed to show.
+            _rewardedAd.OnAdFailedToShow -= HandleRewardedAdFailedToShow;
+            // Called when the user should be rewarded for interacting with the ad.
+            _rewardedAd.OnUserEarnedReward -= HandleUserEarnedReward;
+            // Called when the ad is closed.
+            _rewardedAd.OnAdClosed -= HandleRewardedAdClosed;
 
         }
 
@@ -159,12 +170,11 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             Debug.Log("result " + result.ToString());
         }
 
-        public void UserChoseToWatchAd()
+        private void UserChoseToWatchAd()
         {
-            if (_rewardedAd.IsLoaded())
-            {
-                _rewardedAd.Show();
-            }
+            if (!_rewardedAd.IsLoaded()) return;
+            
+            _rewardedAd.Show();
         }
     }
 }
