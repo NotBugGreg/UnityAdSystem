@@ -20,44 +20,49 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             _placementID = placementID;
             _rewardID = rewardID;
             _adID = adID;
+            
+            ConfigurationMobileAds();
+
         }
 
-        public void ConfigurationMobileAds()
+        private void ConfigurationMobileAds()
         {
             MobileAds.Initialize(initStatus => { });
-            List<string> deviceIds = new List<string>();
+            RequestRewardedAd();
+            ConfigureEvents();
+        /*    List<string> deviceIds = new List<string>();
             deviceIds.Add("1AC3C6A160DE46279DB08F2BA94DBEEE");
             RequestConfiguration requestConfiguration = new RequestConfiguration
                     .Builder()
                 .SetTestDeviceIds(deviceIds)
                 .build();
-            MobileAds.SetRequestConfiguration(requestConfiguration);
-            _rewardedAd = new RewardedAd(_adID);
+            MobileAds.SetRequestConfiguration(requestConfiguration);*/
 
         }
 
-        public void RequestRewardedAd()
+        private void RequestRewardedAd()
         {
+            _rewardedAd = new RewardedAd(_adID);
             // Create an empty ad request.
             AdRequest request = new AdRequest.Builder().Build();
             // Load the rewarded ad with the request.
-            this._rewardedAd.LoadAd(request);
+            _rewardedAd.LoadAd(request);
         }
 
         public void ConfigureEvents()
         {
             // Called when an ad request has successfully loaded.
-            this._rewardedAd.OnAdLoaded += HandleRewardedAdLoaded;
+            _rewardedAd.OnAdLoaded += HandleRewardedAdLoaded;
             // Called when an ad request failed to load.
-            this._rewardedAd.OnAdFailedToLoad += HandleRewardedAdFailedToLoad;
+            _rewardedAd.OnAdFailedToLoad += HandleRewardedAdFailedToLoad;
             // Called when an ad is shown.
-            this._rewardedAd.OnAdOpening += HandleRewardedAdOpening;
+            _rewardedAd.OnAdOpening += HandleRewardedAdOpening;
             // Called when an ad request failed to show.
-            this._rewardedAd.OnAdFailedToShow += HandleRewardedAdFailedToShow;
+            _rewardedAd.OnAdFailedToShow += HandleRewardedAdFailedToShow;
             // Called when the user should be rewarded for interacting with the ad.
-            this._rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
+            _rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
             // Called when the ad is closed.
-            this._rewardedAd.OnAdClosed += HandleRewardedAdClosed;
+            _rewardedAd.OnAdClosed += HandleRewardedAdClosed;
         }
 
         private void HandleRewardedAdLoaded(object sender, EventArgs args)
@@ -113,7 +118,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
 
         }
 
-        public void HandleUserEarnedReward(object sender, Reward args)
+        private void HandleUserEarnedReward(object sender, Reward args)
         {
             string type = args.Type;
             double amount = args.Amount;
@@ -156,9 +161,9 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
 
         public void UserChoseToWatchAd()
         {
-            if (this._rewardedAd.IsLoaded())
+            if (_rewardedAd.IsLoaded())
             {
-                this._rewardedAd.Show();
+                _rewardedAd.Show();
             }
         }
     }

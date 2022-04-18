@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
@@ -11,7 +12,9 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
             _adPlacementRequester = adRewardService;
         }
 
-        public async Task InitGameAsync()
+ 
+
+        public async Task InitGameAsync(Action onSuccess, Action onError)
         {
             await _adPlacementRequester.GetAdPlacements();
         }

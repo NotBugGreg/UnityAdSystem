@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 interface IGameInitializer
 {
-    Task InitGameAsync();
+    Task InitGameAsync(Action onSuccess, Action onError);
+
 }
