@@ -34,7 +34,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         private async Task<AdPlacementDetails> InitializeGameMethod(IGameInitializer initializeGame,
             PlayfabRewardAdsService playfabRewardAdsService)
         {
-            await initializeGame.InitGameAsync(null, null);
+            await initializeGame.InitGameAsync();
             var placementsAds = playfabRewardAdsService.Placements;
             return placementsAds.FirstOrDefault() ??
                          throw new ArgumentNullException("placementsAds.FirstOrDefault()");

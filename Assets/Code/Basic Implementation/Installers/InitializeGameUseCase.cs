@@ -14,9 +14,10 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 
  
 
-        public async Task InitGameAsync(Action onSuccess, Action onError)
+        public async Task InitGameAsync()
         {
             await _adPlacementRequester.GetAdPlacements();
         }
+        
     }
 }
