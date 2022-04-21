@@ -37,13 +37,18 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             MobileAds.SetRequestConfiguration(requestConfiguration);
         }
 
-        public void RequestRewardedAd()
+        public RewardedAd RequestRewardedAd() 
         {
             _rewardedAd = new RewardedAd(_adID);
             ConfigureEvents();
             // Create an empty ad request.
-            AdRequest request = new AdRequest.Builder().Build();
             // Load the rewarded ad with the request.
+            return _rewardedAd;
+        }
+
+        public void LoadRewardedAd()
+        {
+            AdRequest request = new AdRequest.Builder().Build();
             _rewardedAd.LoadAd(request);
         }
 
@@ -131,11 +136,6 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
 
         private void HandleUserEarnedReward(object sender, Reward args)
         {
-            string type = args.Type;
-            double amount = args.Amount;
-            MonoBehaviour.print(
-                "HandleRewardedAdRewarded event received for "
-                + amount.ToString() + " " + type);
 
             var taskCompletionSource = new TaskCompletionSource<bool>();
 
@@ -143,7 +143,6 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
                 new ReportAdActivityRequest {Activity = AdActivity.End, PlacementId = _placementID, RewardId = _rewardID},
                 result => OnSuccess(result, taskCompletionSource),
                 error => OnError(error, taskCompletionSource));
-            Task.Run(() => taskCompletionSource.Task);
 
             var rewardAdActivity = new RewardAdActivityRequest
             {
@@ -155,6 +154,8 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             {
                 Debug.Log(result.RewardResults.GrantedItems);
             }, error => Debug.LogWarning("failed to reward playfab"));
+            
+            Task.Run(() => taskCompletionSource.Task);
 
         }
 

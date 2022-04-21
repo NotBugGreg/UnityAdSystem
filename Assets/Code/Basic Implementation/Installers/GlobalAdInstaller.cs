@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using GoogleMobileAds.Api;
 using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,11 +12,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
     {
         private AdPlacementDetails _adPlacementDetails;
         private GoogleAdmob _googleAdmob;
-
-        public GlobalAdInstaller(Button showRewardAdButton)
-        {
-            showRewardAdButton.onClick.AddListener(ShowGoogleAdmob);
-        }
+        
         public void InitShowRewardAd()
         {
             var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
@@ -34,15 +31,20 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         private async Task<AdPlacementDetails> InitializeGameMethod(IGameInitializer initializeGame,
             PlayfabRewardAdsService playfabRewardAdsService)
         {
-            await initializeGame.InitGameAsync(null, null);
+            await initializeGame.InitGameAsync();
             var placementsAds = playfabRewardAdsService.Placements;
             return placementsAds.FirstOrDefault() ??
                          throw new ArgumentNullException("placementsAds.FirstOrDefault()");
         }
 
-        private void ShowGoogleAdmob()
+        public RewardedAd ShowGoogleAdmob()
         {
-            _googleAdmob.RequestRewardedAd();
+            return _googleAdmob.RequestRewardedAd();
+        }
+
+        public void LoadRewardedAd()
+        {
+            _googleAdmob.LoadRewardedAd();
         }
         
     }
