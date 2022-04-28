@@ -16,7 +16,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         public void InitShowRewardAd()
         {
             var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
-                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID);
             var rewardPlacementAdsUseCase = new RewardPlacementAdsUserCase(adPlacementService);
             var initializeGame = new InitializeGameUseCase(rewardPlacementAdsUseCase);
             InitializeGoogleAdmob(initializeGame, adPlacementService);
@@ -25,7 +25,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         private async void  InitializeGoogleAdmob(InitializeGameUseCase initializeGame, PlayfabRewardAdsService adPlacementService)
         {
             _adPlacementDetails = await InitializeGameMethod(initializeGame, adPlacementService);
-            _googleAdmob = new GoogleAdmob(_adPlacementDetails.PlacementId, _adPlacementDetails.RewardId, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+            _googleAdmob = new GoogleAdmob(_adPlacementDetails.PlacementId, _adPlacementDetails.RewardId, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID);
         }
         
         private async Task<AdPlacementDetails> InitializeGameMethod(IGameInitializer initializeGame,
