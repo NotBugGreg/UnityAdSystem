@@ -13,19 +13,19 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         private AdPlacementDetails _adPlacementDetails;
         private GoogleAdmob _googleAdmob;
         
-        public void InitShowRewardAd()
+        public async Task InitShowRewardAd()
         {
             var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
-                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID);
+                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
             var rewardPlacementAdsUseCase = new RewardPlacementAdsUserCase(adPlacementService);
             var initializeGame = new InitializeGameUseCase(rewardPlacementAdsUseCase);
-            InitializeGoogleAdmob(initializeGame, adPlacementService);
+            await InitializeGoogleAdmob(initializeGame, adPlacementService);
         }
 
-        private async void  InitializeGoogleAdmob(InitializeGameUseCase initializeGame, PlayfabRewardAdsService adPlacementService)
+        private async Task InitializeGoogleAdmob(InitializeGameUseCase initializeGame, PlayfabRewardAdsService adPlacementService)
         {
             _adPlacementDetails = await InitializeGameMethod(initializeGame, adPlacementService);
-            _googleAdmob = new GoogleAdmob(_adPlacementDetails.PlacementId, _adPlacementDetails.RewardId, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID);
+            _googleAdmob = new GoogleAdmob(_adPlacementDetails.PlacementId, _adPlacementDetails.RewardId, PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
         }
         
         private async Task<AdPlacementDetails> InitializeGameMethod(IGameInitializer initializeGame,
