@@ -9,7 +9,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
     public class PlayfabRewardAdsService: IAdPlacement
     {
-        public List<AdPlacementDetails> Placements;
+        public List<AdPlacementDetails> PlacementsDetails;
         private readonly string _appId;
         private readonly string _identifierAd;
 
@@ -18,9 +18,9 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
             _appId = appId;
             _identifierAd = identifierAd;
         }
-        public Task InitAdPlacements()
+        public Task<List<AdPlacementDetails>> InitAdPlacements()
         {
-            var t = new TaskCompletionSource<bool>();
+            var t = new TaskCompletionSource<List<AdPlacementDetails>>();
 
             GetPlacements(t);
             
@@ -28,7 +28,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         }
 
 
-        private void GetPlacements(TaskCompletionSource<bool> taskCompletionSource)
+        private void GetPlacements(TaskCompletionSource<List<AdPlacementDetails>> taskCompletionSource)
         {
             var request = new GetAdPlacementsRequest
                 {AppId = _appId,Identifier = new NameIdentifier {Name = _identifierAd}};
@@ -38,17 +38,17 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
             
         }
 
-        private void OnError(PlayFabError error, TaskCompletionSource<bool> taskCompletionSource)
+        private void OnError(PlayFabError error, TaskCompletionSource<List<AdPlacementDetails>> taskCompletionSource)
         {
-            taskCompletionSource.SetResult(false);
+            taskCompletionSource.SetCanceled();
             throw new Exception(error.GenerateErrorReport());
         }
 
-        private void OnSuccess(GetAdPlacementsResult result, TaskCompletionSource<bool> taskCompletionSource)
+        private void OnSuccess(GetAdPlacementsResult result, TaskCompletionSource<List<AdPlacementDetails>> taskCompletionSource)
         {
-            Placements = result.AdPlacements;
-            taskCompletionSource.SetResult(true);
-            Debug.Log("placements: " + Placements.Count);
+            PlacementsDetails = result.AdPlacements;
+            taskCompletionSource.SetResult(PlacementsDetails);
+            Debug.Log("placements: " + PlacementsDetails.Count);
         }
 
 
