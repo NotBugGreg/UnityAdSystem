@@ -6,7 +6,7 @@ using Submodules.BaseModule.UnityConfigurationAdapter.Installers;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
-    public class GlobalAdInstaller : IInstaller
+    public class AdInstaller : IInstaller
     {
         private AdPlacementDetails _adPlacementDetails;
         public GoogleAdmob GoogleAdmob;
