@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using PlayFab.ClientModels;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
     public interface IAdPlacementRequester
     {
-        Task GetAdPlacements();
+        Task<List<AdPlacementDetails>> GetAdPlacements();
     }
 }

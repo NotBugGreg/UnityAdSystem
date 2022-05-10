@@ -120,7 +120,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             MonoBehaviour.print("HandleRewardedAdClosed event received");
             Task.Run(() => taskCompletionSource.Task);
             
-            _rewardedAd.OnAdLoaded -= HandleRewardedAdLoaded;
+      /*      _rewardedAd.OnAdLoaded -= HandleRewardedAdLoaded;
             // Called when an ad request failed to load.
             _rewardedAd.OnAdFailedToLoad -= HandleRewardedAdFailedToLoad;
             // Called when an ad is shown.
@@ -131,6 +131,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             _rewardedAd.OnUserEarnedReward -= HandleUserEarnedReward;
             // Called when the ad is closed.
             _rewardedAd.OnAdClosed -= HandleRewardedAdClosed;
+            */
 
         }
 
