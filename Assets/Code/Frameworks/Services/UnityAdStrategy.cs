@@ -25,7 +25,6 @@ namespace Frameworks.Services
         {
             _configuration = configuration;
             Advertisement.Initialize(configuration.GameId,
-                configuration.TestMode,
                 true,
                 this);
         }
