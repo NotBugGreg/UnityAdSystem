@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using PlayFab.ClientModels;
-using Submodules.BaseModule.UnityConfigurationAdapter.Installers;
+using Submodules.BaseModule.Code.UnityConfigurationAdapter.Installers;
+
 
 namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
