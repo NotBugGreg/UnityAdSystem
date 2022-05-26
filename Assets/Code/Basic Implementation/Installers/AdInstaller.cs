@@ -15,14 +15,14 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         public async Task InitInstaller()
         {
             var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
-                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID);
             var placementAdsUseCase = new PlacementAdsUserCase(adPlacementService);
             var placementsAds = await placementAdsUseCase.GetAdPlacements();
             _adPlacementDetails = placementsAds.FirstOrDefault();
             
             if (_adPlacementDetails != null)
                 GoogleAdmob = new GoogleAdmob(_adPlacementDetails.PlacementId, _adPlacementDetails.RewardId,
-                    PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+                    PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID);
             else
             {
                 throw new SystemException("No adplacements details");

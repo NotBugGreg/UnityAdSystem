@@ -29,7 +29,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
         {
             MobileAds.Initialize(initStatus => { });
             List<string> deviceIds = new List<string>();
-            deviceIds.Add("1AC3C6A160DE46279DB08F2BA94DBEEE");
+            deviceIds.Add("AEB928235AFC892C31F711F5D9BF5A6B");
             RequestConfiguration requestConfiguration = new RequestConfiguration
                     .Builder()
                 .SetTestDeviceIds(deviceIds)
