@@ -120,19 +120,6 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
             MonoBehaviour.print("HandleRewardedAdClosed event received");
             Task.Run(() => taskCompletionSource.Task);
             
-            _rewardedAd.OnAdLoaded -= HandleRewardedAdLoaded;
-            // Called when an ad request failed to load.
-            _rewardedAd.OnAdFailedToLoad -= HandleRewardedAdFailedToLoad;
-            // Called when an ad is shown.
-            _rewardedAd.OnAdOpening -= HandleRewardedAdOpening;
-            // Called when an ad request failed to show.
-            _rewardedAd.OnAdFailedToShow -= HandleRewardedAdFailedToShow;
-            // Called when the user should be rewarded for interacting with the ad.
-            _rewardedAd.OnUserEarnedReward -= HandleUserEarnedReward;
-            // Called when the ad is closed.
-            _rewardedAd.OnAdClosed -= HandleRewardedAdClosed;
-            
-
         }
 
         private void HandleUserEarnedReward(object sender, Reward args)
@@ -170,6 +157,21 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
         {
             taskCompletionSource.SetResult(true);
             Debug.Log("result " + result.ToString());
+        }
+
+        private void UnsubscribeEvents()
+        {
+            _rewardedAd.OnAdLoaded -= HandleRewardedAdLoaded;
+            // Called when an ad request failed to load.
+            _rewardedAd.OnAdFailedToLoad -= HandleRewardedAdFailedToLoad;
+            // Called when an ad is shown.
+            _rewardedAd.OnAdOpening -= HandleRewardedAdOpening;
+            // Called when an ad request failed to show.
+            _rewardedAd.OnAdFailedToShow -= HandleRewardedAdFailedToShow;
+            // Called when the user should be rewarded for interacting with the ad.
+            _rewardedAd.OnUserEarnedReward -= HandleUserEarnedReward;
+            // Called when the ad is closed.
+            _rewardedAd.OnAdClosed -= HandleRewardedAdClosed;
         }
 
         private void UserChoseToWatchAd()
