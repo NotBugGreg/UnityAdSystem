@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Domain;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 
 namespace InterfaceAdapters
 {
@@ -32,7 +33,7 @@ namespace InterfaceAdapters
             _mainProvider.Init(adConf);
         }
 
-        private void OnShowRewardedAdEnded(InterfaceAdapters.RewardedAdStatus status,
+        private void OnShowRewardedAdEnded(RewardedAdStatus status,
             TaskCompletionSource<Domain.RewardedAdStatus> taskCompletionSource)
         {
             var rewardedAdStatus = MapStatus(status);

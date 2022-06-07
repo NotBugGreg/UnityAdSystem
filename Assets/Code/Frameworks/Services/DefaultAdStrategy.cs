@@ -1,7 +1,9 @@
 using System;
+using Frameworks.Services;
 using InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 
-namespace Frameworks.Services
+namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 {
     public class DefaultAdStrategy : AdSDKAdapter
     {
@@ -34,7 +36,7 @@ namespace Frameworks.Services
         {
             _rewardedAd = await _rewardedAddLoader.Load();
         }
-
+        
         public void Init(AdConf conf)
         {
             _conf = conf;

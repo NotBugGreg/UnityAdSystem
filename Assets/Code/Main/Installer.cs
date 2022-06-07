@@ -4,6 +4,7 @@ using Frameworks.Services;
 using Frameworks.View;
 using InterfaceAdapters;
 using Submodules.UnityAdSystem.Assets.Code.Domain;
+using Submodules.UnityAdSystem.Assets.Code.Frameworks.Services;
 using UnityEngine;
 
 namespace Main
@@ -28,9 +29,12 @@ namespace Main
 
         private AdSDKAdapter GetAdStrategy()
         {
+            return new GoogleAdStrategy();
+
 #if USE_UNITY_SDK
             return new UnityAdStrategy();
 #endif
+
             return new DefaultAdStrategy(_rewardedAddLoaderImpl);
         }
 

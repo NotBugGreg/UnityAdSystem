@@ -1,5 +1,5 @@
 using System;
-using Domain;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 
 namespace InterfaceAdapters
 {

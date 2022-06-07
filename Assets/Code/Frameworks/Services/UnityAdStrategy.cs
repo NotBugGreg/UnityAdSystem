@@ -1,6 +1,8 @@
 using System;
 using InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 using UnityEngine.Advertisements;
+using RewardedAdStatus = InterfaceAdapters.RewardedAdStatus;
 
 namespace Frameworks.Services
 {
@@ -13,12 +15,12 @@ namespace Frameworks.Services
         public void ShowRewardedAd(Action<RewardedAdStatus> callback)
         {
             _callback = callback;
-            Advertisement.Show(_configuration.AdId, this);
+            Advertisement.Show(_configuration.RewardAdId, this);
         }
 
         public void LoadRewardedAd()
         {
-            Advertisement.Load(_configuration.AdId, this);
+            Advertisement.Load(_configuration.RewardAdId, this);
         }
 
         public void Init(AdConf configuration)
@@ -26,7 +28,7 @@ namespace Frameworks.Services
             _configuration = configuration;
             Advertisement.Initialize(configuration.GameId,
                 true,
-                this);
+                true);
         }
 
         public void OnInitializationComplete()
