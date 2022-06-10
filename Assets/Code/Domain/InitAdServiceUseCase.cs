@@ -1,22 +1,20 @@
-using Domain;
-
 namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public class InitAdServiceUseCase
     {
-        private readonly AdService _adService;
-        private readonly AdConfigurationProvider _adConfigurationProvider;
+        private readonly IAdService _adService;
+        private readonly IAdConfigurationProvider _adConfigurationProvider;
 
-        public InitAdServiceUseCase(AdService adService,
-            AdConfigurationProvider adConfigurationProvider)
+        public InitAdServiceUseCase(IAdService adService,
+            IAdConfigurationProvider adConfigurationProvider)
         {
             _adService = adService;
             _adConfigurationProvider = adConfigurationProvider;
         }
 
-        public async void Init()
+        public void Init()
         {
-            var configuration = await _adConfigurationProvider.GetConfiguration();
+            var configuration = _adConfigurationProvider.GetConfiguration();
             _adService.Init(configuration);
         }
     }

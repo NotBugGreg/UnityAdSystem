@@ -1,20 +1,18 @@
 using System;
-using InterfaceAdapters;
 using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 using UnityEngine.Advertisements;
-using RewardedAdStatus = InterfaceAdapters.RewardedAdStatus;
 
-namespace Frameworks.Services
+namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 {
-    public class UnityAdStrategy : AdSDKAdapter, IUnityAdsInitializationListener,
+    public class UnityAdStrategy : IAdSDKAdapter, IUnityAdsInitializationListener,
         IUnityAdsLoadListener, IUnityAdsShowListener
     {
         private AdConf _configuration;
-        private Action<RewardedAdStatus> _callback;
+        private Action<RewardedAdStatusInterfaceAdapter> _callback;
 
-        public void ShowRewardedAd(Action<RewardedAdStatus> callback)
+
+        public void ShowRewardedAd()
         {
-            _callback = callback;
             Advertisement.Show(_configuration.RewardAdId, this);
         }
 
@@ -22,6 +20,12 @@ namespace Frameworks.Services
         {
             Advertisement.Load(_configuration.RewardAdId, this);
         }
+
+        public void SetCallbackRewardedAd(Action<RewardedAdStatusInterfaceAdapter> callback)
+        {
+            _callback = callback;
+        }
+
 
         public void Init(AdConf configuration)
         {
@@ -49,7 +53,7 @@ namespace Frameworks.Services
 
         public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
         {
-            _callback.Invoke(RewardedAdStatus.Error);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Error);
         }
 
         public void OnUnityAdsShowStart(string placementId)
@@ -65,11 +69,11 @@ namespace Frameworks.Services
             switch (showCompletionState)
             {
                 case UnityAdsShowCompletionState.COMPLETED:
-                    _callback.Invoke(RewardedAdStatus.Ok);
+                    _callback.Invoke(RewardedAdStatusInterfaceAdapter.Ok);
                     break;
                 case UnityAdsShowCompletionState.UNKNOWN:
                 case UnityAdsShowCompletionState.SKIPPED:
-                    _callback.Invoke(RewardedAdStatus.Cancel);
+                    _callback.Invoke(RewardedAdStatusInterfaceAdapter.Cancel);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(showCompletionState), showCompletionState, null);

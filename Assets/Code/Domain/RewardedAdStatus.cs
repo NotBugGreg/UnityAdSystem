@@ -1,8 +1,12 @@
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public enum RewardedAdStatus
     {
-        Ok, 
-        Error
+        //status more specifics
+        Ok,
+        Cancel,
+        Error,
+        DeliverReward,
+        ErrorReward
     }
 }

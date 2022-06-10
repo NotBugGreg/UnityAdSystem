@@ -1,54 +1,61 @@
 using System;
 using System.Threading.Tasks;
 using Domain;
-using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.Domain;
 
-namespace InterfaceAdapters
+namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
-    public class AdServiceImpl : AdService
+    public class AdServiceImpl : IAdService
     {
-        private readonly AdSDKAdapter _mainProvider;
+        private readonly IAdSDKAdapter _mainProvider;
 
-        public AdServiceImpl(AdSDKAdapter mainProvider)
+        public AdServiceImpl(IAdSDKAdapter mainProvider)
         {
             _mainProvider = mainProvider;
         }
 
-        public Task<Domain.RewardedAdStatus> ShowRewardedAd()
+        public void ShowRewardedAd()
         {
-            var taskCompletionSource = new TaskCompletionSource<Domain.RewardedAdStatus>();
-            _mainProvider.ShowRewardedAd(status => OnShowRewardedAdEnded(status, taskCompletionSource));
-
-            return Task.Run(() => taskCompletionSource.Task);
+            _mainProvider.ShowRewardedAd();
         }
+
 
         public void LoadRewardedAd()
         {
             _mainProvider.LoadRewardedAd();
         }
 
-        public void Init(AdConfiguration configuration)
+        public Task<RewardedAdStatus> DeliverRewardedAd()
         {
-            var adConf = new AdConf(configuration.AdId);
+            var taskCompletionSource = new TaskCompletionSource<RewardedAdStatus>();
+            _mainProvider.SetCallbackRewardedAd(status => OnShowRewardedAdEnded(status, taskCompletionSource));
+
+            return Task.Run(() => taskCompletionSource.Task);
+        }
+
+
+        public void Init(AdConfiguration adConfiguration)
+        {
+            var adConf = new AdConf(adConfiguration.AdId);
             _mainProvider.Init(adConf);
         }
 
-        private void OnShowRewardedAdEnded(RewardedAdStatus status,
-            TaskCompletionSource<Domain.RewardedAdStatus> taskCompletionSource)
+        private void OnShowRewardedAdEnded(RewardedAdStatusInterfaceAdapter status,
+            TaskCompletionSource<RewardedAdStatus> taskCompletionSource)
         {
             var rewardedAdStatus = MapStatus(status);
             taskCompletionSource.SetResult(rewardedAdStatus);
         }
 
-        private static Domain.RewardedAdStatus MapStatus(RewardedAdStatus status)
+        private static RewardedAdStatus MapStatus(RewardedAdStatusInterfaceAdapter status)
         {
             switch (status)
             {
-                case RewardedAdStatus.Ok:
-                    return Domain.RewardedAdStatus.Ok;
-                case RewardedAdStatus.Cancel:
-                case RewardedAdStatus.Error:
-                    return Domain.RewardedAdStatus.Error;
+                case RewardedAdStatusInterfaceAdapter.Ok:
+                    return RewardedAdStatus.Ok;
+                case RewardedAdStatusInterfaceAdapter.Cancel:
+                case RewardedAdStatusInterfaceAdapter.Error:
+                    return RewardedAdStatus.Error;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, null);
             }

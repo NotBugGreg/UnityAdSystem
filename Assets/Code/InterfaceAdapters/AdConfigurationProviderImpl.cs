@@ -1,14 +1,15 @@
 using System.Threading.Tasks;
 using Domain;
+using Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers;
+using Submodules.UnityAdSystem.Assets.Code.Domain;
 
-namespace InterfaceAdapters
+namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
-    public class AdConfigurationProviderImpl : AdConfigurationProvider
+    public class AdConfigurationProviderImpl : IAdConfigurationProvider
     {
-        public async Task<AdConfiguration> GetConfiguration()
+        public AdConfiguration GetConfiguration()
         {
-            await Task.Delay(1000);
-            return new AdConfiguration("asasd");
+            return new AdConfiguration(PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
         }
     }
 }

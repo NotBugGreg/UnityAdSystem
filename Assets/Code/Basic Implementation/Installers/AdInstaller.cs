@@ -16,7 +16,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
         {
             var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
                 PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID);
-            var placementAdsUseCase = new PlacementAdsUserCase(adPlacementService);
+            var placementAdsUseCase = new InitAdPlacementsUseCase(adPlacementService);
             var placementsAds = await placementAdsUseCase.GetAdPlacements();
             _adPlacementDetails = placementsAds.FirstOrDefault();
             

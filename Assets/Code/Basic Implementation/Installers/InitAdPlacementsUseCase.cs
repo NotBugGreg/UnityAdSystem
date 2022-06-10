@@ -4,10 +4,10 @@ using PlayFab.ClientModels;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
-    internal class PlacementAdsUserCase: IAdPlacementRequester
+    internal class InitAdPlacementsUseCase: IAdPlacementRequester
     {
         private readonly IAdPlacement _adPlacementService;
-        public PlacementAdsUserCase(IAdPlacement adPlacementService)
+        public InitAdPlacementsUseCase(IAdPlacement adPlacementService)
         {
             _adPlacementService = adPlacementService;
         }

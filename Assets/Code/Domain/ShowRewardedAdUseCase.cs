@@ -1,25 +1,19 @@
+using Domain;
 
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public class ShowRewardedAdUseCase
     {
-        private readonly AdService _adService;
+        private readonly IAdService _adService;
 
-        public ShowRewardedAdUseCase(AdService adService)
+        public ShowRewardedAdUseCase(IAdService adService)
         {
             _adService = adService;
         }
 
-        public async void Show()
+        public void Show()
         {
-            var result = await _adService.ShowRewardedAd();
-            if (result == RewardedAdStatus.Ok)
-            {
-                // TODO: Dar la recompensa use case
-                return;
-            }
-            
-            // TODO: Mostar mensaje de error use case
+            _adService.ShowRewardedAd();
         }
     }
 }

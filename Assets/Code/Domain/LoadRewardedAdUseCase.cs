@@ -1,10 +1,12 @@
-namespace Domain
+using Domain;
+
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public class LoadRewardedAdUseCase
     {
-        private readonly AdService _adService;
+        private readonly IAdService _adService;
 
-        public LoadRewardedAdUseCase(AdService adService)
+        public LoadRewardedAdUseCase(IAdService adService)
         {
             _adService = adService;
         }

@@ -1,6 +1,6 @@
 ﻿namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
-    public class PlayfabAdConfiguration
+    public static class PlayfabAdConfiguration
     {
         public const string APP_ID_AD = "ca-app-pub-3009865580436574~3542055920";
         public const string ONE_VIDEO_THREE_HINTS_UNIT_ID = "ca-app-pub-3009865580436574/8781940162";

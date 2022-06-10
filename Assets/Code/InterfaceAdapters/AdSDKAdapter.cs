@@ -1,12 +1,13 @@
 using System;
-using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 
-namespace InterfaceAdapters
+namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
-    public interface AdSDKAdapter
+    public interface IAdSDKAdapter
     {
-        void ShowRewardedAd(Action<RewardedAdStatus> callback);
+        void ShowRewardedAd();
         void LoadRewardedAd();
+        void SetCallbackRewardedAd(Action<RewardedAdStatusInterfaceAdapter> callback);
+
         void Init(AdConf configuration);
     }
 }

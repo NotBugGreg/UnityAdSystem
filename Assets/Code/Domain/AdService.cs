@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
+using Domain;
 
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
-    public interface AdService
+    public interface IAdService
     {
-        Task<RewardedAdStatus> ShowRewardedAd();
+        void ShowRewardedAd();
         void LoadRewardedAd();
         void Init(AdConfiguration adConfiguration);
+        Task<RewardedAdStatus> DeliverRewardedAd();
     }
 }

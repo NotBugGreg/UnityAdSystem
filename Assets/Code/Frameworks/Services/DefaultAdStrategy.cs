@@ -1,16 +1,16 @@
 using System;
 using Frameworks.Services;
-using InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.Domain;
 using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 {
-    public class DefaultAdStrategy : AdSDKAdapter
+    public class DefaultAdStrategy : IAdSDKAdapter
     {
         private RewardedAd _rewardedAd;
         private readonly RewardedAddLoader _rewardedAddLoader;
-        private Action<RewardedAdStatus> _callback;
-        
+        private Action<RewardedAdStatusInterfaceAdapter> _callback;
+
         private AdConf _conf;
 
         public DefaultAdStrategy(RewardedAddLoader rewardedAddLoader)
@@ -19,12 +19,11 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         }
 
 
-        public void ShowRewardedAd(Action<RewardedAdStatus> callback)
+        public void ShowRewardedAd()
         {
             if (_rewardedAd == null)
                 throw new NullReferenceException("Rewarded ad not loaded");
-            
-            _callback = callback;
+
             _rewardedAd.OnOkButtonPressed += HandleOk;
             _rewardedAd.OnCancelButtonPressed += HandleCancel;
             _rewardedAd.OnErrorButtonPressed += HandleError;
@@ -36,7 +35,12 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         {
             _rewardedAd = await _rewardedAddLoader.Load();
         }
-        
+
+        public void SetCallbackRewardedAd(Action<RewardedAdStatusInterfaceAdapter> callback)
+        {
+            _callback = callback;
+        }
+
         public void Init(AdConf conf)
         {
             _conf = conf;
@@ -44,23 +48,23 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 
         private void HandleOk()
         {
-            ReturnWith(RewardedAdStatus.Ok);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.Ok);
             Reset();
         }
 
         private void HandleCancel()
         {
-            ReturnWith(RewardedAdStatus.Cancel);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.Cancel);
             Reset();
         }
 
         private void HandleError()
         {
-            ReturnWith(RewardedAdStatus.Error);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.Error);
             Reset();
         }
 
-        private void ReturnWith(RewardedAdStatus result)
+        private void ReturnWith(RewardedAdStatusInterfaceAdapter result)
         {
             _callback(result);
         }
