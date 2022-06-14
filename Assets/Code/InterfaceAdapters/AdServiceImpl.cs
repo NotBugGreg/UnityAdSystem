@@ -1,56 +1,69 @@
 using System;
-using System.Threading.Tasks;
-using Domain;
+using Submodules.UnityAdSystem.Assets.Code.Domain;
+using Submodules.UnityAdSystem.Assets.Code.Domain.Services;
 
-namespace InterfaceAdapters
+namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
-    public class AdServiceImpl : AdService
+    public class AdServiceImpl : IAdService
     {
-        private readonly AdSDKAdapter _mainProvider;
+        private readonly IAdSDKAdapter _mainProvider;
+        private Action<RewardedAdStatus> _adServiceCallBack;
 
-        public AdServiceImpl(AdSDKAdapter mainProvider)
+        public AdServiceImpl(IAdSDKAdapter mainProvider)
         {
             _mainProvider = mainProvider;
         }
 
-        public Task<Domain.RewardedAdStatus> ShowRewardedAd()
+        public void SetStatusRewardedAdCallback()
         {
-            var taskCompletionSource = new TaskCompletionSource<Domain.RewardedAdStatus>();
-            _mainProvider.ShowRewardedAd(status => OnShowRewardedAdEnded(status, taskCompletionSource));
-
-            return Task.Run(() => taskCompletionSource.Task);
+            _mainProvider.SetCallbackRewardedAd(OnRewardedStatusListener);
         }
+
+        public void SetObserver(Action <RewardedAdStatus> callback)
+        {
+            _adServiceCallBack += callback;
+        }
+        
+
+        public void ShowRewardedAd()
+        {
+            _mainProvider.ShowRewardedAd();
+        }
+
 
         public void LoadRewardedAd()
         {
             _mainProvider.LoadRewardedAd();
         }
+        
 
-        public void Init(AdConfiguration configuration)
+        public void Init(AdConfiguration adConfiguration)
         {
-            var adConf = new AdConf(configuration.AdId);
+            var adConf = new AdConf(adConfiguration.AdId);
             _mainProvider.Init(adConf);
         }
 
-        private void OnShowRewardedAdEnded(InterfaceAdapters.RewardedAdStatus status,
-            TaskCompletionSource<Domain.RewardedAdStatus> taskCompletionSource)
+        private void OnRewardedStatusListener(RewardedAdStatusInterfaceAdapter status)
         {
             var rewardedAdStatus = MapStatus(status);
-            taskCompletionSource.SetResult(rewardedAdStatus);
+            _adServiceCallBack.Invoke(rewardedAdStatus);
         }
 
-        private static Domain.RewardedAdStatus MapStatus(RewardedAdStatus status)
+        private static RewardedAdStatus MapStatus(RewardedAdStatusInterfaceAdapter status)
         {
-            switch (status)
+            return status switch
             {
-                case RewardedAdStatus.Ok:
-                    return Domain.RewardedAdStatus.Ok;
-                case RewardedAdStatus.Cancel:
-                case RewardedAdStatus.Error:
-                    return Domain.RewardedAdStatus.Error;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
-            }
+                RewardedAdStatusInterfaceAdapter.InitializationComplete => RewardedAdStatus.InitializationComplete,
+                RewardedAdStatusInterfaceAdapter.InitializationFailed => RewardedAdStatus.InitializationFailed,
+                RewardedAdStatusInterfaceAdapter.RewardedClicked => RewardedAdStatus.RewardedClicked,
+                RewardedAdStatusInterfaceAdapter.RewardedAdClosed => RewardedAdStatus.RewardedAdClosed,
+                RewardedAdStatusInterfaceAdapter.RewardedAdLoaded => RewardedAdStatus.RewardedAdLoaded,
+                RewardedAdStatusInterfaceAdapter.RewardedAdOpening => RewardedAdStatus.RewardedAdOpening,
+                RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward => RewardedAdStatus.HandleUserEarnedReward,
+                RewardedAdStatusInterfaceAdapter.RewardedAdFailedToLoad => RewardedAdStatus.RewardedAdFailedToLoad,
+                RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow => RewardedAdStatus.RewardedAdFailedToShow,
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+            };
         }
     }
 }

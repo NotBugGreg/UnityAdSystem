@@ -1,4 +1,4 @@
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public class AdConfiguration
     {

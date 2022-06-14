@@ -1,8 +1,15 @@
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
     public enum RewardedAdStatus
     {
-        Ok, 
-        Error
+        InitializationComplete,
+        InitializationFailed,
+        RewardedClicked,
+        RewardedAdClosed,
+        RewardedAdLoaded,
+        RewardedAdOpening,
+        HandleUserEarnedReward,
+        RewardedAdFailedToLoad,
+        RewardedAdFailedToShow
     }
 }

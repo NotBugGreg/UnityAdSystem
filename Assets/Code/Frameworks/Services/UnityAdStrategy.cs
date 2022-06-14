@@ -1,77 +1,78 @@
 using System;
-using InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 using UnityEngine.Advertisements;
 
-namespace Frameworks.Services
+namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 {
-    public class UnityAdStrategy : AdSDKAdapter, IUnityAdsInitializationListener,
+    public class UnityAdStrategy : IAdSDKAdapter, IUnityAdsInitializationListener,
         IUnityAdsLoadListener, IUnityAdsShowListener
     {
         private AdConf _configuration;
-        private Action<RewardedAdStatus> _callback;
+        private Action<RewardedAdStatusInterfaceAdapter> _callback;
 
-        public void ShowRewardedAd(Action<RewardedAdStatus> callback)
+
+        public void ShowRewardedAd()
         {
-            _callback = callback;
-            Advertisement.Show(_configuration.AdId, this);
+            Advertisement.Show(_configuration.RewardAdId, this);
         }
 
         public void LoadRewardedAd()
         {
-            Advertisement.Load(_configuration.AdId, this);
+            Advertisement.Load(_configuration.RewardAdId, this);
         }
+
+        public void SetCallbackRewardedAd(Action<RewardedAdStatusInterfaceAdapter> callback)
+        {
+            _callback = callback;
+        }
+
 
         public void Init(AdConf configuration)
         {
             _configuration = configuration;
             Advertisement.Initialize(configuration.GameId,
                 true,
-                this);
+                true);
         }
 
         public void OnInitializationComplete()
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationComplete);
         }
 
         public void OnInitializationFailed(UnityAdsInitializationError error, string message)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationFailed);
         }
 
         public void OnUnityAdsAdLoaded(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdLoaded);
         }
 
         public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
         }
 
         public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
         {
-            _callback.Invoke(RewardedAdStatus.Error);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
         }
 
         public void OnUnityAdsShowStart(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdOpening);
         }
 
         public void OnUnityAdsShowClick(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedClicked);
         }
 
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
         {
-            switch (showCompletionState)
-            {
-                case UnityAdsShowCompletionState.COMPLETED:
-                    _callback.Invoke(RewardedAdStatus.Ok);
-                    break;
-                case UnityAdsShowCompletionState.UNKNOWN:
-                case UnityAdsShowCompletionState.SKIPPED:
-                    _callback.Invoke(RewardedAdStatus.Cancel);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(showCompletionState), showCompletionState, null);
-            }
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward);
         }
     }
 }
