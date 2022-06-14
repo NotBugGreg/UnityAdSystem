@@ -37,47 +37,42 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 
         public void OnInitializationComplete()
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationComplete);
         }
 
         public void OnInitializationFailed(UnityAdsInitializationError error, string message)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationFailed);
         }
 
         public void OnUnityAdsAdLoaded(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdLoaded);
         }
 
         public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
         }
 
         public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
         {
-            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Error);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
         }
 
         public void OnUnityAdsShowStart(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdOpening);
         }
 
         public void OnUnityAdsShowClick(string placementId)
         {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedClicked);
         }
 
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
         {
-            switch (showCompletionState)
-            {
-                case UnityAdsShowCompletionState.COMPLETED:
-                    _callback.Invoke(RewardedAdStatusInterfaceAdapter.Ok);
-                    break;
-                case UnityAdsShowCompletionState.UNKNOWN:
-                case UnityAdsShowCompletionState.SKIPPED:
-                    _callback.Invoke(RewardedAdStatusInterfaceAdapter.Cancel);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(showCompletionState), showCompletionState, null);
-            }
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward);
         }
     }
 }

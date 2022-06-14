@@ -2,35 +2,36 @@
 using System.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
-using Submodules.UnityAdSystem.Assets.Code.Main;
 using UnityEngine;
 
-namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
+namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services.ReportingServices
 {
-    public class PlayfabReportAdActivityService : IReportAdActivity
+    public abstract class PlayfabReportAdActivity : IReportAdActivity
     {
-        private readonly string _placementID;
-        private readonly string _rewardID;
+        protected readonly string PlacementID;
+        protected readonly string RewardID;
 
-        public PlayfabReportAdActivityService(string placementID, string rewardID)
+        protected PlayfabReportAdActivity(string placementID, string rewardID)
         {
-            _placementID = placementID;
-            _rewardID = rewardID;
+            PlacementID = placementID;
+            RewardID = rewardID;
         }
+
         public Task<ReportAdActivityResult> InitAdReporting()
         {
             var t = new TaskCompletionSource<ReportAdActivityResult>();
 
-            ReportingAdActivity(t);
+            var request = CreateRequest();
+            SendAdReport(request, t);
 
             return Task.Run(() => t.Task);
         }
 
-        public void ReportingAdActivity(TaskCompletionSource<ReportAdActivityResult> taskCompletionSource)
-        {
-            var reportAdActivityRequester = new ReportAdActivityRequest
-                {Activity = AdActivity.End, PlacementId = _placementID, RewardId = _rewardID};
+        protected abstract ReportAdActivityRequest CreateRequest();
 
+        private void SendAdReport(ReportAdActivityRequest reportAdActivityRequester,
+            TaskCompletionSource<ReportAdActivityResult> taskCompletionSource)
+        {
             PlayFabClientAPI.ReportAdActivity(reportAdActivityRequester
                 ,
                 result => OnSuccess(result, taskCompletionSource),
@@ -46,6 +47,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         private void OnSuccess(ReportAdActivityResult result,
             TaskCompletionSource<ReportAdActivityResult> taskCompletionSource)
         {
+            taskCompletionSource.SetResult(result);
             Debug.Log(result.ToString());
         }
     }

@@ -2,15 +2,15 @@
 using System.Threading.Tasks;
 using PlayFab;
 using PlayFab.ClientModels;
+using Submodules.UnityAdSystem.Assets.Code.Domain.Services;
 using UnityEngine;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 {
     public class PlayfabRewardActivityAdService : IRewardActivityAd
     {
-        private string _placementID;
-        private string _rewardID;
-
+        private readonly string _placementID;
+        private readonly string _rewardID;
 
         public PlayfabRewardActivityAdService(string placementID, string rewardID)
         {
@@ -49,6 +49,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         private void OnSuccess(RewardAdActivityResult result,
             TaskCompletionSource<RewardAdActivityResult> taskCompletionSource)
         {
+            taskCompletionSource.SetResult(result);
             Debug.Log(result.ToString());
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PlayFab.ClientModels;
 
-namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
+namespace Submodules.UnityAdSystem.Assets.Code.Domain.Services
 {
     public interface IRewardActivityAd
     {

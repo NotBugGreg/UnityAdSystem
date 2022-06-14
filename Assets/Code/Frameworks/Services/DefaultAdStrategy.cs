@@ -48,19 +48,19 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 
         private void HandleOk()
         {
-            ReturnWith(RewardedAdStatusInterfaceAdapter.Ok);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward);
             Reset();
         }
 
         private void HandleCancel()
         {
-            ReturnWith(RewardedAdStatusInterfaceAdapter.Cancel);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
             Reset();
         }
 
         private void HandleError()
         {
-            ReturnWith(RewardedAdStatusInterfaceAdapter.Error);
+            ReturnWith(RewardedAdStatusInterfaceAdapter.InitializationFailed);
             Reset();
         }
 

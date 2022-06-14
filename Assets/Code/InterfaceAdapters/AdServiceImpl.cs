@@ -1,18 +1,29 @@
 using System;
-using System.Threading.Tasks;
-using Domain;
 using Submodules.UnityAdSystem.Assets.Code.Domain;
+using Submodules.UnityAdSystem.Assets.Code.Domain.Services;
 
 namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
     public class AdServiceImpl : IAdService
     {
         private readonly IAdSDKAdapter _mainProvider;
+        private Action<RewardedAdStatus> _adServiceCallBack;
 
         public AdServiceImpl(IAdSDKAdapter mainProvider)
         {
             _mainProvider = mainProvider;
         }
+
+        public void SetStatusRewardedAdCallback()
+        {
+            _mainProvider.SetCallbackRewardedAd(OnRewardedStatusListener);
+        }
+
+        public void SetObserver(Action <RewardedAdStatus> callback)
+        {
+            _adServiceCallBack += callback;
+        }
+        
 
         public void ShowRewardedAd()
         {
@@ -24,15 +35,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
         {
             _mainProvider.LoadRewardedAd();
         }
-
-        public Task<RewardedAdStatus> DeliverRewardedAd()
-        {
-            var taskCompletionSource = new TaskCompletionSource<RewardedAdStatus>();
-            _mainProvider.SetCallbackRewardedAd(status => OnShowRewardedAdEnded(status, taskCompletionSource));
-
-            return Task.Run(() => taskCompletionSource.Task);
-        }
-
+        
 
         public void Init(AdConfiguration adConfiguration)
         {
@@ -40,25 +43,27 @@ namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
             _mainProvider.Init(adConf);
         }
 
-        private void OnShowRewardedAdEnded(RewardedAdStatusInterfaceAdapter status,
-            TaskCompletionSource<RewardedAdStatus> taskCompletionSource)
+        private void OnRewardedStatusListener(RewardedAdStatusInterfaceAdapter status)
         {
             var rewardedAdStatus = MapStatus(status);
-            taskCompletionSource.SetResult(rewardedAdStatus);
+            _adServiceCallBack.Invoke(rewardedAdStatus);
         }
 
         private static RewardedAdStatus MapStatus(RewardedAdStatusInterfaceAdapter status)
         {
-            switch (status)
+            return status switch
             {
-                case RewardedAdStatusInterfaceAdapter.Ok:
-                    return RewardedAdStatus.Ok;
-                case RewardedAdStatusInterfaceAdapter.Cancel:
-                case RewardedAdStatusInterfaceAdapter.Error:
-                    return RewardedAdStatus.Error;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
-            }
+                RewardedAdStatusInterfaceAdapter.InitializationComplete => RewardedAdStatus.InitializationComplete,
+                RewardedAdStatusInterfaceAdapter.InitializationFailed => RewardedAdStatus.InitializationFailed,
+                RewardedAdStatusInterfaceAdapter.RewardedClicked => RewardedAdStatus.RewardedClicked,
+                RewardedAdStatusInterfaceAdapter.RewardedAdClosed => RewardedAdStatus.RewardedAdClosed,
+                RewardedAdStatusInterfaceAdapter.RewardedAdLoaded => RewardedAdStatus.RewardedAdLoaded,
+                RewardedAdStatusInterfaceAdapter.RewardedAdOpening => RewardedAdStatus.RewardedAdOpening,
+                RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward => RewardedAdStatus.HandleUserEarnedReward,
+                RewardedAdStatusInterfaceAdapter.RewardedAdFailedToLoad => RewardedAdStatus.RewardedAdFailedToLoad,
+                RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow => RewardedAdStatus.RewardedAdFailedToShow,
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+            };
         }
     }
 }

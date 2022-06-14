@@ -50,32 +50,33 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
 
         private void HandleRewardedAdClosed(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdClosed);
         }
 
         private void HandleRewardedAdFailedToShow(object sender, AdErrorEventArgs e)
         {
-            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Error);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToShow);
+
         }
 
         private void HandleUserEarnedReward(object sender, Reward e)
         {
-            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Ok);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward);
         }
 
         private void HandleRewardedAdOpening(object sender, EventArgs e)
         {
-            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Ok);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdOpening);
         }
 
         private void HandleRewardedAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)
         {
-            _callback.Invoke(RewardedAdStatusInterfaceAdapter.Error);
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdFailedToLoad);
         }
 
         private void HandleRewardedAdLoaded(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.RewardedAdLoaded);
         }
 
         public void Init(AdConf configuration)
@@ -83,7 +84,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
             //var deviceIds = new List<string>();
             //deviceIds.Add("AEB928235AFC892C31F711F5D9BF5A6B");
             _configuration = configuration;
-            MobileAds.Initialize(initStatus => { });
+            MobileAds.Initialize(HandleInitialization);
 
             var requestConfiguration = new RequestConfiguration
                     .Builder()
@@ -91,6 +92,11 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
                 .build();
 
             MobileAds.SetRequestConfiguration(requestConfiguration);
+        }
+
+        private void HandleInitialization(InitializationStatus initStatus)
+        {
+            _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationComplete);
         }
     }
 }

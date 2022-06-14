@@ -1,10 +1,11 @@
 using System.Linq;
-using Domain;
 using Frameworks.Services;
+using Submodules.accountmodule.Code.UnityConfigurationAdapters.Installers;
 using Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers;
 using Submodules.UnityAdSystem.Assets.Code.Domain;
 using Submodules.UnityAdSystem.Assets.Code.Frameworks.Services;
 using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
+using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters.Gateways;
 using UnityEngine;
 
 namespace Submodules.UnityAdSystem.Assets.Code.Main
@@ -17,37 +18,51 @@ namespace Submodules.UnityAdSystem.Assets.Code.Main
         private ReportAdActivityUseCase _reportAdActivityUseCase;
         private RewardAdActivityUseCase _rewardAdActivityUseCase;
         private DeliverRewardedAdUseCase _deliverRewardedAdUseCase;
+        private AccountInstaller _accountInstaller;
 
         private async void Awake()
         {
-            var adPlacementService = new PlayfabRewardAdsService(PlayfabAdConfiguration.APP_ID_AD,
-                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID);
+            _accountInstaller = new AccountInstaller();
+        
+            await _accountInstaller.InitInstaller();
+            var userId = _accountInstaller.UserDataAccess.GetUserId();
+            
+            var adPlacementService = new PlayfabRewardAdsService("ca-app-pub-3009865580436574~5588757423",
+                "TEST_REWARD_PRANIMALS");
             var initAdPlacementsUseCase = new InitAdPlacementsUseCase(adPlacementService);
             var placementsAds = await initAdPlacementsUseCase.GetAdPlacements();
             var adPlacementDetails = placementsAds.FirstOrDefault();
-
-
-            var adStrategy = GetAdStrategy();
-            var adServiceImpl = new AdServiceImpl(adStrategy);
+            var placementID = adPlacementDetails?.PlacementId;
+            var rewardID = adPlacementDetails?.RewardId;
             
-            var reportAdActivityService = new PlayfabReportAdActivityService(adPlacementDetails.PlacementId, adPlacementDetails.RewardId);
+            var adStrategy = GetAdStrategy();
 
+            var adServiceImpl = new AdServiceImpl(adStrategy );
+            adServiceImpl.SetStatusRewardedAdCallback();
+            
+            var reportGateway = new ReportGateway(placementID, rewardID);
+            
             var playfabRewardActivityAdService =
-                new PlayfabRewardActivityAdService(adPlacementDetails.PlacementId, adPlacementDetails.RewardId);
+                new PlayfabRewardActivityAdService(placementID, rewardID);
 
 
             var adConfigurationProviderImpl = new AdConfigurationProviderImpl();
+            adConfigurationProviderImpl.SetAdId(rewardID);
             var initAdServiceUseCase = new InitAdServiceUseCase(adServiceImpl, adConfigurationProviderImpl);
-            initAdServiceUseCase.Init();
 
-            _reportAdActivityUseCase = new ReportAdActivityUseCase(reportAdActivityService);
+            _reportAdActivityUseCase = new ReportAdActivityUseCase(reportGateway, adServiceImpl);
+            
             _rewardAdActivityUseCase = new RewardAdActivityUseCase(playfabRewardActivityAdService);
 
             _loadRewardedAdUseCase = new LoadRewardedAdUseCase(adServiceImpl);
             _showRewardedAdUseCase = new ShowRewardedAdUseCase(adServiceImpl);
-            _deliverRewardedAdUseCase = new DeliverRewardedAdUseCase(adServiceImpl);
+            _deliverRewardedAdUseCase = new DeliverRewardedAdUseCase(adServiceImpl, playfabRewardActivityAdService);
             
-            _deliverRewardedAdUseCase.InitCallbackReward();
+            _deliverRewardedAdUseCase.DeliverReward();
+            _reportAdActivityUseCase.ReportingAd(); 
+            initAdServiceUseCase.Init();
+         
+
         }
 
         private IAdSDKAdapter GetAdStrategy()

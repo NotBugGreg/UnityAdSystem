@@ -2,10 +2,15 @@
 {
     public enum RewardedAdStatusInterfaceAdapter
     {
-        Ok,
-        Cancel,
-        Error,
-        DeliverReward,
-        ErrorReward
+  
+        RewardedAdClosed,
+        RewardedAdFailedToShow,
+        HandleUserEarnedReward,
+        RewardedAdOpening,
+        RewardedAdFailedToLoad,
+        RewardedAdLoaded,
+        InitializationFailed,
+        InitializationComplete,
+        RewardedClicked
     }
 }
