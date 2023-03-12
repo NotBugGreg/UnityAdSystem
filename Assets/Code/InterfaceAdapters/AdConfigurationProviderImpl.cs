@@ -1,14 +1,20 @@
-using System.Threading.Tasks;
-using Domain;
+using Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers;
+using Submodules.UnityAdSystem.Assets.Code.Domain;
 
-namespace InterfaceAdapters
+namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
-    public class AdConfigurationProviderImpl : AdConfigurationProvider
+    public class AdConfigurationProviderImpl : IAdConfigurationProvider
     {
-        public async Task<AdConfiguration> GetConfiguration()
+        private string _adID;
+        
+        public AdConfiguration GetConfiguration()
         {
-            await Task.Delay(1000);
-            return new AdConfiguration("asasd");
+            return new AdConfiguration(_adID);
+        }
+
+        public void SetAdId(string adID)
+        {
+            _adID = adID;
         }
     }
 }

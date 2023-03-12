@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
-
-namespace Domain
+namespace Submodules.UnityAdSystem.Assets.Code.Domain
 {
-    public interface AdConfigurationProvider
+    public interface IAdConfigurationProvider
     {
-        Task<AdConfiguration> GetConfiguration();
+        AdConfiguration GetConfiguration();
+        void SetAdId(string adID);
+
     }
 }

@@ -9,7 +9,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 {
     public class PlayfabRewardAdsService: IAdPlacement
     {
-        public List<AdPlacementDetails> PlacementsDetails;
+        private List<AdPlacementDetails> _placementsDetails;
         private readonly string _appId;
         private readonly string _identifierAd;
 
@@ -46,9 +46,9 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation.Installers
 
         private void OnSuccess(GetAdPlacementsResult result, TaskCompletionSource<List<AdPlacementDetails>> taskCompletionSource)
         {
-            PlacementsDetails = result.AdPlacements;
-            taskCompletionSource.SetResult(PlacementsDetails);
-            Debug.Log("placements: " + PlacementsDetails.Count);
+            _placementsDetails = result.AdPlacements;
+            taskCompletionSource.SetResult(_placementsDetails);
+            Debug.Log("placements: " + _placementsDetails.Count);
         }
 
 
