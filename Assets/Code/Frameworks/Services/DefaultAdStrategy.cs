@@ -46,6 +46,11 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
             _conf = conf;
         }
 
+        public GoogleMobileAds.Api.RewardedAd GetRequestRewardedAd()
+        {
+            throw new NotImplementedException();
+        }
+
         private void HandleOk()
         {
             ReturnWith(RewardedAdStatusInterfaceAdapter.HandleUserEarnedReward);

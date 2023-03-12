@@ -94,6 +94,11 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
             MobileAds.SetRequestConfiguration(requestConfiguration);
         }
 
+        public RewardedAd GetRequestRewardedAd()
+        {
+            return _rewardedAd;
+        }
+
         private void HandleInitialization(InitializationStatus initStatus)
         {
             _callback.Invoke(RewardedAdStatusInterfaceAdapter.InitializationComplete);

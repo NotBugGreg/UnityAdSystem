@@ -1,4 +1,5 @@
 using System;
+using GoogleMobileAds.Api;
 using Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters;
 using UnityEngine.Advertisements;
 
@@ -31,8 +32,13 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         {
             _configuration = configuration;
             Advertisement.Initialize(configuration.GameId,
-                true,
-                true);
+                true
+                );
+        }
+
+        public RewardedAd GetRequestRewardedAd()
+        {
+            throw new NotImplementedException();
         }
 
         public void OnInitializationComplete()

@@ -1,4 +1,5 @@
 using System;
+using GoogleMobileAds.Api;
 
 namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
 {
@@ -9,5 +10,6 @@ namespace Submodules.UnityAdSystem.Assets.Code.InterfaceAdapters
         void SetCallbackRewardedAd(Action<RewardedAdStatusInterfaceAdapter> callback);
 
         void Init(AdConf configuration);
+        RewardedAd GetRequestRewardedAd();
     }
 }
