@@ -3,19 +3,14 @@
     public class PlayfabAdConfiguration
     {
 
-        public static readonly string APP_ID_AD = "ca-app-pub-3009865580436574~3542055920";//"ca-app-pub-3009865580436574~3542055920";
-        public static readonly string ONE_VIDEO_THREE_HINTS_UNIT_ID = "ca-app-pub-3009865580436574/8781940162";
-        //public static readonly string ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST = "ca-app-pub-3009865580436574/8781940162";//"ca-app-pub-3940256099942544/5224354917";
+        public static readonly string ADMOB_APP_ID = "ca-app-pub-3009865580436574~3542055920";//This is what matters to admob
 
-
-        public static readonly string NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID = "ONE_VIDEO_THREE_HINTS_UNIT_ID";
-        public static readonly string NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST = "ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST";
-
-        //public static readonly string APP_ID_AD = "ca-app-pub-3009865580436574~3542055920";
-        //public static readonly string ONE_VIDEO_THREE_HINTS_UNIT_ID = "ca-app-pub-3009865580436574/8781940162";
-        //public static readonly string ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST = "ca-app-pub-3940256099942544/5224354917";
-        //
-        //public static readonly string NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID = "ONE_VIDEO_THREE_HINTS_UNIT_ID";
-        //public static readonly string NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST = "ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST";
+#if UNITY_EDITOR
+        public static readonly string AD_ID = "AdmobDoesntMind";
+        public static readonly string REWARD_ID = "EDITOR_SOLITAIRE_HINT_REWARD"; //for playfab
+#else
+        public static readonly string AD_ID = "ca-app-pub-3009865580436574/8781940162";
+        public static readonly string REWARD_ID = "SOLITAIRE_HINT_REWARD";
+#endif
     }
 }
