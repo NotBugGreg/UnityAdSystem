@@ -49,8 +49,8 @@ namespace Submodules.UnityAdSystem.Assets.Code.Main
             var placementID = adPlacementDetails?.PlacementId;
             var rewardID = adPlacementDetails?.RewardId;
 
-            GoogleAdmob = new GoogleAdmob(PlayfabAdConfiguration.ADMOB_APP_ID,
-                PlayfabAdConfiguration.REWARD_ID, PlayfabAdConfiguration.AD_ID);
+            GoogleAdmob = new GoogleAdmob(PlayfabAdConfiguration.APP_ID_AD,
+                PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
 
         _adStrategy = GetAdStrategy();
 
