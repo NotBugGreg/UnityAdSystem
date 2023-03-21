@@ -49,10 +49,18 @@ namespace Submodules.UnityAdSystem.Assets.Code.Main
             var placementID = adPlacementDetails?.PlacementId;
             var rewardID = adPlacementDetails?.RewardId;
 
-            GoogleAdmob = new GoogleAdmob(PlayfabAdConfiguration.APP_ID_AD,
-                 PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+            if(Debug.isDebugBuild)
+            {
+                GoogleAdmob = new GoogleAdmob(PlayfabAdConfiguration.APP_ID_AD,
+               PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID_TEST);
+            }
+            else
+            {
+                GoogleAdmob = new GoogleAdmob(PlayfabAdConfiguration.APP_ID_AD,
+               PlayfabAdConfiguration.NAME_ONE_VIDEO_THREE_HINTS_UNIT_ID, PlayfabAdConfiguration.ONE_VIDEO_THREE_HINTS_UNIT_ID);
+            }
 
-        _adStrategy = GetAdStrategy();
+            _adStrategy = GetAdStrategy();
 
             var adServiceImpl = new AdServiceImpl(_adStrategy);
             adServiceImpl.SetStatusRewardedAdCallback();
@@ -77,16 +85,16 @@ namespace Submodules.UnityAdSystem.Assets.Code.Main
 
             _deliverRewardedAdUseCase.DeliverReward();
             _reportAdActivityUseCase.ReportingAd();
-            initAdServiceUseCase.Init();
+            //initAdServiceUseCase.Init();
         }
 
         private IAdSDKAdapter GetAdStrategy()
         {
             return new GoogleAdStrategy();
 
-            #if USE_UNITY_SDK
+#if USE_UNITY_SDK
                 return new UnityAdStrategy();
-            #endif
+#endif
 
         }
     }

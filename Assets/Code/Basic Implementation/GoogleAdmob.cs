@@ -39,6 +39,7 @@ namespace Submodules.UnityAdSystem.Assets.Code.Basic_Implementation
 
         public RewardedAd RequestRewardedAd() 
         {
+            Debug.Log("Requesting new Ad");
             _rewardedAd = new RewardedAd(_adID);
             ConfigureEvents();
             // Create an empty ad request.
