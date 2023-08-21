@@ -31,7 +31,6 @@ namespace Submodules.UnityAdSystem.Assets.Code.Frameworks.Services
         {
             _configuration = configuration;
             Advertisement.Initialize(configuration.GameId,
-                true,
                 true);
         }
 
